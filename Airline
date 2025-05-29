@@ -1,0 +1,68 @@
+import javax.swing.*; import 
+java.awt.*; import java.awt.event.ActionEvent; import java.awt.event.ActionListener; 
+import java.util.ArrayList;  
+  
+public class AirlineReservationSystem {  
+  
+    private JFrame frame;     private JTextField flightSearchField;     private JTextArea resultArea;      private ArrayList<String> flights;  
+  
+    public AirlineReservationSystem() {         flights = new 
+ArrayList<>();         flights.add("Flight 101 - New York to Los Angeles");         flights.add("Flight 102 - Chicago to Miami");         flights.add("Flight 103 - San Francisco to 
+Seattle");         flights.add("Flight 104 - Dallas to Atlanta");  
+          initialize();  
+    }  
+  
+    private void initialize() {         
+// Main frame          frame = new JFrame("Airline Reservation System");          frame.setSize(600, 400);  
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+  
+        // Layout  
+        frame.setLayout(new BorderLayout());  
+  
+        // Panel for input  
+        JPanel inputPanel = new JPanel();         inputPanel.setLayout(new FlowLayout());         JLabel searchLabel 
+= new JLabel("Search Flight:");         flightSearchField = new JTextField(20);         JButton searchButton = new 
+JButton("Search");         inputPanel.add(searchLabel);         inputPanel.add(flightSearchField);  
+        inputPanel.add(searchButton);  
+  
+        // Result area  
+        resultArea 	= 	new 	JTextArea(15, 	50);         resultArea.setEditable(false);  
+        JScrollPane scrollPane = new JScrollPane(resultArea);  
+  
+        // Booking button  
+        JButton bookButton = new JButton("Book Flight");  
+  
+        // Add components to the frame         frame.add(inputPanel, BorderLayout.NORTH);         frame.add(scrollPane, BorderLayout.CENTER);         frame.add(bookButton, BorderLayout.SOUTH);  
+  
+        // Search button action          searchButton.addActionListener(new ActionListener() {  
+            @Override  
+            public void actionPerformed(ActionEvent e) {  
+                String searchQuery = flightSearchField.getText().toLowerCase();                  resultArea.setText(""); // Clear previous results                 
+boolean found = false;  
+                  for (String flight : flights) {                      if (flight.toLowerCase().contains(searchQuery)) {                          resultArea.append(flight + "\n");                          found = true;  
+                    }  
+                }  
+  
+                if (!found) {  
+                    resultArea.append("No flights found matching the search query.\n");  
+                }  
+            }  
+        });            // Book button action          bookButton.addActionListener(new ActionListener() {  
+            @Override  
+            public void actionPerformed(ActionEvent e) {  
+                String selectedFlight = JOptionPane.showInputDialog(frame, "Enter the flight number to book:");                 if (selectedFlight != null && !selectedFlight.isEmpty()) {                     boolean exists = flights.stream().anyMatch(flight -> flight.contains(selectedFlight));                      if (exists) {  
+                        JOptionPane.showMessageDialog(frame, "Flight " + selectedFlight + " booked successfully!");  
+                    } else {  
+                        JOptionPane.showMessageDialog(frame, "Invalid flight number.");  
+                    }  
+                }  
+            }  
+        });  
+  
+        frame.setVisible(true);  
+    }  
+  
+    public static void main(String[] args) {  
+        SwingUtilities.invokeLater(AirlineReservationSystem::new);  
+    }  
+}  
